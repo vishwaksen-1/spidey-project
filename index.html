@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spidey's Freebie Stash! 🕸️</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind Config (Keep in HTML for the CDN) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'cute': ['"Comic Neue"', 'cursive'] },
+                    colors: {
+                        spidey: {
+                            red: '#ff4d4d', darkred: '#cc0000',
+                            blue: '#4d79ff', darkblue: '#0033cc',
+                            web: '#f0f4f8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 
+      =============================================================
+      STYLE.CSS 
+      For GitHub: Copy everything between the <style> tags into a 
+      new file named 'style.css' and replace this block with:
+      <link rel="stylesheet" href="style.css">
+      =============================================================
+    -->
+    <style>
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f8ff;
+            /* Cute dot pattern to simulate a comic book / web texture */
+            background-image: radial-gradient(#b3d4ff 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+        
+        .spidey-card {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+        
+        .spidey-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .web-border {
+            border: 4px dashed #4d79ff;
+        }
+
+        /* Pulse animation for the play button to draw attention */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(77, 121, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(77, 121, 255, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(77, 121, 255, 0); }
+        }
+        .pulse-attention {
+            animation: pulse-ring 2s infinite;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col relative">
+
+    <!-- 🎵 Audio Control Button (Top Right) 🎵 -->
+    <button id="musicToggleBtn" class="fixed top-4 right-4 z-50 bg-white text-spidey-blue p-3 rounded-full shadow-lg border-4 border-spidey-blue hover:bg-spidey-web transition-transform transform hover:scale-110 flex items-center justify-center pulse-attention" onclick="toggleMusic(event)" title="Play/Pause Theme">
+        <i id="musicIcon" class="ph-fill ph-speaker-slash text-3xl"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="bg-spidey-red text-white py-8 shadow-lg relative overflow-hidden border-b-8 border-spidey-blue">
+        <svg class="absolute top-0 left-0 text-white opacity-20 w-32 h-32 transform -translate-x-4 -translate-y-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="flex justify-center items-center gap-4 mb-2">
+                <i class="ph ph-spider text-5xl animate-bounce"></i>
+                <h1 class="text-4xl md:text-5xl font-bold tracking-wider drop-shadow-md">Spidey's Freebie Stash!</h1>
+                <i class="ph ph-spider text-5xl animate-bounce" style="animation-delay: 0.2s;"></i>
+            </div>
+            <p class="text-xl mt-2 font-bold bg-white text-spidey-red inline-block px-4 py-1 rounded-full shadow-sm">
+                Friendly neighborhood giveaways! Adopt my unused gear! 🕸️
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl p-6 mb-12 shadow-md web-border text-center">
+            <h2 class="text-2xl font-bold text-spidey-blue mb-2">How to claim an item?</h2>
+            <p class="text-lg">If you see something you like that needs rescuing, just shoot me a web (DM/call)! Everything is 100% free(mostly), some just need a little TLC (Tender Loving Care). ❤️</p>
+        </div>
+
+        <!-- Items Grid Container -->
+        <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Items injected via JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-spidey-blue text-white py-8 text-center mt-auto border-t-8 border-spidey-red">
+        <div class="container mx-auto px-4">
+            <p class="text-2xl font-bold mb-2">"With great power comes great responsibility... to Share!" ♻️</p>
+            <p class="text-spidey-web">Made with ☕ and webs for GitHub Pages</p>
+            <p class="text-spidey-web">P.S. Was too lazy to take and put photos...</p>
+        </div>
+    </footer>
+
+    <!-- 
+      =============================================================
+      SCRIPT.JS 
+      For GitHub: Copy everything between the <script> tags into a 
+      new file named 'script.js' and replace this block with:
+      <script src="script.js"></script>
+      =============================================================
+    -->
+    <script>
+        // ==========================================
+        // 🕸️ AUDIO LOGIC & STATE 🕸️
+        // ==========================================
+        const bgMusic = new Audio('assets/music/spiderman-theme.mp3');
+        bgMusic.loop = true; 
+        bgMusic.volume = 0.5;
+
+        const claimMusic = new Audio('assets/music/black-suit-theme.mp3');
+        claimMusic.volume = 0.7;
+
+        let isMuted = true; // Starts completely muted based on user choice
+        let currentTrack = null; // Keeps track of exactly one audio source
+
+        // Update the visual state of the top right button
+        function updateAudioIcon(isPlaying) {
+            const icon = document.getElementById('musicIcon');
+            const btn = document.getElementById('musicToggleBtn');
+            
+            if (isPlaying) {
+                icon.classList.remove('ph-speaker-slash');
+                icon.classList.add('ph-speaker-high');
+                btn.classList.remove('pulse-attention'); // Stop pulsing when playing
+            } else {
+                icon.classList.remove('ph-speaker-high');
+                icon.classList.add('ph-speaker-slash');
+                btn.classList.add('pulse-attention'); // Pulse to remind them it's muted
+            }
+        }
+
+        // Toggles global audio state (acts as mute/unmute for whatever is playing)
+        window.toggleMusic = function(event) {
+            if (event) event.stopPropagation();
+            
+            if (isMuted) {
+                // UNMUTE: Default to playing the background music
+                isMuted = false;
+                if (currentTrack) currentTrack.pause(); 
+                currentTrack = bgMusic;
+                currentTrack.play().catch(e => console.log("Audio play failed:", e));
+                updateAudioIcon(true);
+            } else {
+                // MUTE: Silence whichever track is currently active
+                isMuted = true;
+                if (currentTrack) currentTrack.pause();
+                updateAudioIcon(false);
+            }
+        };
+
+        // Triggered when a user clicks any "Claim This Item" button
+        window.playClaimSoundAndAlert = function() {
+            // 1. Stop any currently playing audio (Spidey theme, or a previous claim click)
+            if (currentTrack) {
+                currentTrack.pause();
+            }
+            
+            // 2. Switch to Black Suit theme, reset to start to prevent overlapping
+            isMuted = false; 
+            currentTrack = claimMusic;
+            currentTrack.currentTime = 0; // Rewinds to the start of the audio file
+            
+            // 3. Play the audio and update the UI button to show sound is active
+            currentTrack.play().catch(e => console.log("Claim sound failed:", e));
+            updateAudioIcon(true);
+
+            // 4. Fire the alert shortly after
+            setTimeout(() => {
+                alert('Just DM on WhatsApp or call me');
+            }, 100);
+        };
+
+        // Bonus: When the Black Suit theme finishes naturally, switch back to Spidey Theme!
+        claimMusic.addEventListener('ended', () => {
+            if (!isMuted) {
+                currentTrack = bgMusic;
+                currentTrack.play().catch(e => console.log(e));
+                updateAudioIcon(true);
+            }
+        });
+
+
+        // ==========================================
+        // 🕸️ DATA & RENDER LOGIC 🕸️
+        // ==========================================
+        const giveawayItems = [
+            {
+                name: "Mini White Board",
+                image: "https://placehold.co/400x300/ff4d4d/ffffff?text=Mini+White+Board",
+                description: "(✿◠‿◠) <br> A smol white board (30cm x 50cm), with a marker and an eraser",
+                condition: 5,
+                repairCost: "None / ₹25 for a new marker",
+                repairsNeeded: "Current marker might be dusty soo...",
+                damageSeverity: "None - completely usable as is!",
+                usability: "High - Happiness and Mood board, and maybe some task tracking.",
+                isFree: true,
+                price: "Free!"
+            },
+            {
+                name: "Cycle",
+                image: "https://placehold.co/400x300/4dff4d/ffffff?text=Cycle",
+                description: "(ミ￣ー￣ミ) <br> A cool Blue color cycle. Not so gently used",
+                condition: 3, 
+                repairCost: "₹300-500",
+                repairsNeeded: "Replace back tyre, and maybe get it serviced, brakes are all fine.",
+                damageSeverity: "Critial - You'd rather walk",
+                usability: "Low until tyre is replaced.",
+                isFree: true,
+                price: "Free!"
+            },
+            {
+                name: "Wooden Plank",
+                image: "https://placehold.co/400x300/ffb347/ffffff?text=Plank",
+                description: "┌( ಠ_ಠ)┘ <br> A2 size plank. It's more of a boat that helped me cross examsss",
+                condition: 6, 
+                repairCost: "None",
+                repairsNeeded: "Naught",
+                damageSeverity: "Nil",
+                usability: "Maximum",
+                isFree: true,
+                price: "Free!"
+            },
+            {
+                name: "Bed (Matress)",
+                image: "https://placehold.co/400x300/4d79ff/ffffff?text=Matress",
+                description: "( 　ﾟ,_ゝﾟ) <br> I guess it has some sleep-magic spell. Totally recommend 100%",
+                condition: 4.5,
+                repairCost: "Nada",
+                repairsNeeded: "egg",
+                damageSeverity: "Líng",
+                usability: "High ",
+                isFree: true,
+                price: "Free!"
+            },            {
+                name: "Mini Laptop Table",
+                image: "https://placehold.co/400x300/b3ff47/ffffff?text=Laptop+Table",
+                description: "(☞ﾟヮﾟ)☞ ┻━┻ <br> Has Spider-Man on it, and multiplication tables(really useful [-_-])",
+                condition: 4,
+                repairCost: "Maybe ₹50 or less",
+                repairsNeeded: "May get it's leg fixed at a carpenter",
+                damageSeverity: "Has a dangling leg, not fully broke",
+                usability: "Okayish",
+                isFree: true,
+                price: "Free!"
+            },
+            {
+                name: "Kettle",
+                image: "https://placehold.co/400x300/b347ff/ffffff?text=Kettle",
+                description: "ↁ_ↁ <br> A cool water kettle. Does what it does. Rarely used",
+                condition: 5,
+                repairCost: "None",
+                repairsNeeded: "None",
+                damageSeverity: "nihilum",
+                usability: "High - Cooks water perfectly",
+                isFree: false,
+                price: "talk"
+            },
+            {
+                name: "Sci. Calculator",
+                image: "https://placehold.co/400x300/ff4d4d/ffffff?text=Calc",
+                description: "ᕙ(⇀‸↼‶)ᕗ <br> Smart guy. He's never wrong. He's always right.",
+                condition: 5,
+                repairCost: "ゼロ",
+                repairsNeeded: "Nothing",
+                damageSeverity: "nix",
+                usability: "High - Cooks brain perfectly.",
+                isFree: false,
+                price: "talk"
+            }
+        ];
+
+        function generateStars(rating) {
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += `<i class="ph-fill ph-star text-yellow-400 text-2xl drop-shadow-sm"></i>`;
+                } else {
+                    starsHtml += `<i class="ph ph-star text-gray-300 text-2xl drop-shadow-sm"></i>`;
+                }
+            }
+            return starsHtml;
+        }
+
+        function renderItems() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = ''; 
+
+            if (giveawayItems.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-2xl text-gray-500 font-bold p-12">My stash is empty right now! Check back later! 🕸️</div>`;
+                return;
+            }
+
+            giveawayItems.forEach(item => {
+                // Determine styling and text based on if the item is free or has a price
+                const badgeColors = item.isFree 
+                    ? "bg-yellow-400 text-spidey-darkred" 
+                    : "bg-green-500 text-white";
+                
+                const badgeText = item.isFree ? "Free!" : item.price;
+                const buttonText = item.isFree ? "Claim This Item!" : "Buy This Item!";
+
+                const card = document.createElement('div');
+                card.className = 'spidey-card bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-spidey-blue flex flex-col h-full';
+                
+                card.innerHTML = `
+                    <div class="relative bg-spidey-web p-4 pb-0">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover rounded-t-2xl rounded-b-lg border-2 border-dashed border-spidey-red" onerror="this.src='https://placehold.co/400x300/eeeeee/999999?text=Image+Missing+🕸️'">
+                        <div class="absolute -top-2 -right-2 ${badgeColors} font-bold py-1 px-3 rounded-full transform rotate-12 shadow-md border-2 border-white">
+                            ${badgeText}
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-spidey-darkred mb-2 uppercase tracking-wide">${item.name}</h3>
+                        <p class="text-gray-600 mb-4 flex-grow text-lg leading-snug">${item.description}</p>
+                        
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-4 border border-gray-100">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-spidey-blue">Working Condition:</span>
+                                <div class="flex gap-1">${generateStars(item.condition)}</div>
+                            </div>
+                            
+                            <div class="space-y-2 mt-4 text-sm">
+                                <div class="flex items-start gap-2">
+                                    <i class="ph-fill ph-wrench text-spidey-red mt-1"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-700">Repairs Needed:</span>
+                                        <span class="text-gray-600">${item.repairsNeeded}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="ph-fill ph-coin text-yellow-500 mt-1"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-700">Est. Repair Cost:</span>
+                                        <span class="text-gray-600">${item.repairCost}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="ph-fill ph-bandaids text-spidey-red mt-1"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-700">Damage:</span>
+                                        <span class="text-gray-600">${item.damageSeverity}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="ph-fill ph-rocket text-green-500 mt-1"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-700">Usability:</span>
+                                        <span class="text-gray-600">${item.usability}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-spidey-red hover:bg-spidey-darkred text-white font-bold py-3 px-4 rounded-xl transition duration-200 transform hover:scale-105 shadow-md flex items-center justify-center gap-2 text-lg" onclick="playClaimSoundAndAlert()">
+                            <i class="ph-bold ph-hand-grabbing"></i>
+                            ${buttonText}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderItems);
+    </script>
+</body>
+</html>
